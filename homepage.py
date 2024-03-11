@@ -1,23 +1,24 @@
 import streamlit as st
-
-from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 from langchain.schema import (
     AIMessage,
     HumanMessage,
-    SystemMessage
 )
 
 
 import os,time
-os.environ["http_proxy"] = "http://localhost:7890"
-os.environ["https_proxy"] = "http://localhost:7890"
+# os.environ["http_proxy"] = "http://localhost:7890"
+# os.environ["https_proxy"] = "http://localhost:7890"
 
 chat = None
 #如果openai没有在会话中(会话的作用是存储一些历史信息),则设置为空
 if "OPENAI_API_KEY" not in st.session_state:
     st.session_state["OPENAI_API_KEY"] = ''
 elif st.session_state["OPENAI_API_KEY"] != '':
-    chat = ChatOpenAI(openai_api_key=st.session_state["OPENAI_API_KEY"])
+    chat = ChatOpenAI(openai_api_key=st.session_state["OPENAI_API_KEY"],
+                                        openai_api_base="https://api.aigc369.com/v1"
+                      )
 
 if "PINECONE_ENVIRONMENT" not in st.session_state:
     st.session_state["PINECONE_ENVIRONMENT"] = ''
@@ -28,7 +29,7 @@ if "PINECONE_API_KEY" not in st.session_state:
 st.set_page_config(
     page_title="Wecome to Openai",
     layout= "wide",
-    page_icon="机器人👀"
+    page_icon="👀使用机器人👀"
 )
 #目录
 st.title("😀  欢迎来到 OpenAI 😀 ")
@@ -57,25 +58,25 @@ if chat:
        # 对话历史记录
         for message in st.session_state["messages"]:
             if isinstance(message, HumanMessage):
-                with st.chat_message("user"):
+                with st.chat_message("user",avatar="👨"):
                     st.markdown(message.content)
             elif isinstance(message, AIMessage):
-                with st.chat_message("assistant"):
+                with st.chat_message("assistant",avatar="🧐"):
                     st.markdown(message.content)
 
         #聊天输入框
-        prompt = st.chat_input("输入信息")
+        prompt = st.chat_input("请输入你的问题")
         if prompt:
             st.session_state["messages"].append(
                 HumanMessage(content=prompt)
             )
-            with st.chat_message("user"):
+            with st.chat_message("user",avatar="👨"):
                 st.markdown(prompt)
                 # st.write(f'{prompt}')
             with st.spinner("AI正在思考中，请稍等..."):
                 ai_answer = chat([HumanMessage(content=prompt ) ])
                 st.session_state["messages"].append(ai_answer)
-                with st.chat_message("assistant"):
+                with st.chat_message("assistant",avatar="🧐"): #设置头像：avatar="🧐"
                     # st.markdown(
                     #     ai_answer.content
                     # )
