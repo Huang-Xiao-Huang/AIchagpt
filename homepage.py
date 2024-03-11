@@ -8,8 +8,7 @@ from langchain.schema import (
 
 
 import os,time
-# os.environ["http_proxy"] = "http://localhost:7890"
-# os.environ["https_proxy"] = "http://localhost:7890"
+
 
 chat = None
 #如果openai没有在会话中(会话的作用是存储一些历史信息),则设置为空
@@ -61,7 +60,7 @@ if chat:
                 with st.chat_message("user",avatar="👨"):
                     st.markdown(message.content)
             elif isinstance(message, AIMessage):
-                with st.chat_message("assistant",avatar="🧐"):
+                with st.chat_message("assistant",avatar="🤖"):
                     st.markdown(message.content)
 
         #聊天输入框
@@ -73,10 +72,10 @@ if chat:
             with st.chat_message("user",avatar="👨"):
                 st.markdown(prompt)
                 # st.write(f'{prompt}')
-            with st.spinner("AI正在思考中，请稍等..."):
+            with st.spinner("⌛ AI正在思考中，请稍等..."):
                 ai_answer = chat([HumanMessage(content=prompt ) ])
                 st.session_state["messages"].append(ai_answer)
-                with st.chat_message("assistant",avatar="🧐"): #设置头像：avatar="🧐"
+                with st.chat_message("assistant",avatar="🤖"): #设置头像：avatar="🧐"
                     # st.markdown(
                     #     ai_answer.content
                     # )
