@@ -4,6 +4,8 @@
 技术栈：
 streamlit 网页框架
 langchain 大模型框架
+chatgpt 大语言模型
+rola  框架
 生成标准的对话模式
 
 完成对话模式
